@@ -30,6 +30,8 @@ public class CameraController : MonoBehaviour
                 GameObject plant = hit.transform.gameObject;
                 if( GUIController_.GetMode() == GUIController.Mode.RemovePlant )
                 {
+                    // TODO: remove from all neighbours and wind neighbours
+                    // TODO: on add recalculate neighbours and wind neigh
                     Destroy( plant );
                 }
                 else if( GUIController_.GetMode() == GUIController.Mode.ToggleFire )

@@ -17,6 +17,8 @@ public class BushHealth : MonoBehaviour
 
     float flameDistance_;
     Color defaultColor_;
+    public List<GameObject> neighbourPlants_ = new List<GameObject>();
+    public List<GameObject> windNeighbourPlants_ = new List<GameObject>();
 
     // Initialization
     void Start()
@@ -36,6 +38,8 @@ public class BushHealth : MonoBehaviour
         renderer_ = GetComponent<Renderer>();
 
         defaultColor_ = renderer_.material.color;
+
+        //neighbourPlants_ = new List<GameObject>();
     }
 
     // Update call
@@ -65,7 +69,10 @@ public class BushHealth : MonoBehaviour
             {
                 // The bush has burnt
                 isBurnt_ = true;
-                HasBurnt();
+                HasBurnt(); 
+                /* TODO: remove neighbours + from neighbours list -> burnt plant 
+                 * cannot light up others; 
+                 * On extinguish it is like adding new plant - redo neighbours */
             }
         }
     }
@@ -85,6 +92,27 @@ public class BushHealth : MonoBehaviour
         isBurning_ = true;
         // Set red color
         renderer_.material.color = new Color( 255f, 0f, 0f, 1f );
+
+        /* TODO: skip for the wind test */
+        //return;
+        /* TODO: test */
+        foreach( GameObject p in neighbourPlants_ )
+        {
+            if( !p.GetComponent<BushHealth>().IsBurning() && !p.GetComponent<BushHealth>().isNearFire_ )
+            {
+                //p.GetComponent<BushHealth>().StartedBurning();
+                p.GetComponent<BushHealth>().SetNearFire();
+            }
+        }
+        /* TODO: wind test */
+        foreach( GameObject p in windNeighbourPlants_ )
+        {
+            if( !p.GetComponent<BushHealth>().IsBurning() && !p.GetComponent<BushHealth>().isNearFire_ )
+            {
+                //p.GetComponent<BushHealth>().StartedBurning();
+                p.GetComponent<BushHealth>().SetNearFire();
+            }
+        }
     }
 
     public void HasBurnt()
@@ -98,6 +126,7 @@ public class BushHealth : MonoBehaviour
         health_ = 5f;
         isBurnt_ = false;
         isBurning_ = false;
+        /* TODO: check all lists of plants and set not near fire is noone is burning */
         renderer_.material.color = defaultColor_;
     }
 
@@ -105,4 +134,12 @@ public class BushHealth : MonoBehaviour
     {
         return isBurning_;
     }
+
+    //public float GetAngleToObject( Vector3 objectPosition, Vector3 windDirection )
+    //{
+    //    Vector3 v1 = objectPosition - transform.position;
+    //    Vector3 v2 = windDirection;
+        
+    //    return Vector3.Angle( v1, v2 );
+    //}
 }
